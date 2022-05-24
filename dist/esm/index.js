@@ -74,7 +74,7 @@ export class WrappedObject {
         return p in target;
     }
 }
-export const typeOf = (value) => value != null ? Array.isArray(value) ? 'array' : typeof value == 'object' ? 'object' : typeof value == 'function' ? 'function' : null : null;
+export const typeOf = (value) => value != null && !(value instanceof ArrayBuffer) ? Array.isArray(value) ? 'array' : typeof value == 'object' ? 'object' : typeof value == 'function' ? 'function' : null : null;
 export class WrappedHandler {
     request;
     map = new BiMap;
@@ -112,6 +112,14 @@ export class WrappedHandler {
         id = id || uuidv4();
         this.map.set(id, value);
         return id;
+    }
+    join(value, id) {
+        const type = typeOf(value);
+        id = this.new(value, id);
+        return {
+            id,
+            type
+        };
     }
     remote(data) {
         const obj = new WrappedObject(this, data);

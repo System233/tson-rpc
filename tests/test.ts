@@ -12,20 +12,26 @@ class Test{
         console.log(this.name,'call()',obj, args);
         obj.print(args)
     }
-
+    log(...args){
+        console.log(this.name,...args);
+    }
     print(args:[]){
-        console.log(this.name,'print', args);
-        console.log(this.name,'print length', args.length);
-        console.log(this.name,'print', args.map(x=>`${x}!`));
+        this.log('print', args);
+        this.log('print length', args.length);
+        this.log('print', args.map(x=>`${x}!`));
     }
     push(array:any[]){
-        console.log(this.name,'push() before',array)
+        this.log('push() before',array)
         array.push('pushed data');
-        console.log(this.name,'push() after',array)
-        console.log(this.name,'set',array)
-        console.log(this.name,'set length',array.length)
-        console.log(this.name,'set iter..',[...array])
-        console.log(this.name,'set iter',array[Symbol.iterator])
+        this.log('push() after',array)
+        this.log('set',array)
+        this.log('set length',array.length)
+        this.log('set iter..',[...array])
+        this.log('set iter',array[Symbol.iterator])
+    }
+    buffer(buffer:ArrayBuffer){
+        this.log('buffer',buffer)
+        this.log('new buffer',new Uint8Array(buffer))
     }
 };
 let client:WrappedHandler;
@@ -35,12 +41,12 @@ const test=new Test("[Remote]");
 const erase=(data:any)=>JSON.parse(JSON.stringify(data));
 
 const server=new WrappedHandler(req=>client.handle(erase(req)));
-const id=server.new(test);
+const remoteId=server.join(test);
 
 
 
 client=new WrappedHandler(req=>server.handle(erase(req)));
-const remote=client.remote<Test>({id,type:typeOf(test)});
+const remote=client.remote<Test>(remoteId);
 
 
 const localArray:string[]=[];
@@ -49,3 +55,10 @@ const local=new Test("[Local]");
 remote.call(local,"local string");
 remote.push(localArray);
 console.log('localArray',localArray)
+const localBuffer=new ArrayBuffer(10);
+remote.buffer(localBuffer);
+const proxy=new Proxy(localBuffer,{});
+console.log('typeof',typeof proxy);
+console.log('instanceof',proxy instanceof ArrayBuffer );
+const test2=new Uint8Array(proxy)
+console.log('test2',test2);

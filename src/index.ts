@@ -86,7 +86,7 @@ export interface WrappedRequest{
     data: TSONData[]
 }
 export type RequestHandler = (request:WrappedRequest) => TSONData | TSONData[];
-export const typeOf = (value: any): TypeOf => value != null ? Array.isArray(value) ? 'array' : typeof value == 'object' ? 'object' : typeof value == 'function' ? 'function' : null : null;
+export const typeOf = (value: any): TypeOf => value != null&& !(value instanceof ArrayBuffer) ? Array.isArray(value) ? 'array' : typeof value == 'object' ? 'object' : typeof value == 'function' ? 'function' : null : null;
 export class WrappedHandler {
     map: BiMap<string, object> = new BiMap;
     tson: TSON = new TSON;
@@ -126,6 +126,14 @@ export class WrappedHandler {
         id = id || uuidv4();
         this.map.set(id, value);
         return id;
+    }
+    join(value: object, id?: string):WrappedObjectData{
+        const type=typeOf(value);
+        id=this.new(value,id);
+        return {
+            id,
+            type
+        }
     }
     remote<T extends object>(data: WrappedObjectData): T {
         const obj = new WrappedObject<T>(this, data) as T;
