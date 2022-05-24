@@ -1,6 +1,6 @@
 {
   "name": "tson-rpc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Connect objects anywhere in pairs like quantum entanglement.",
   "main": "dist/cjs/index.js",
   "types": "src/index.ts",
