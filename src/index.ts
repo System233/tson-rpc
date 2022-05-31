@@ -154,4 +154,7 @@ export class WrappedHandler {
     delete(id: string) {
         return this.map.delete(id);
     }
+    get(id:string){
+        return this.map.getByKey(id);
+    }
 }

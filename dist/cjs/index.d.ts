@@ -51,4 +51,5 @@ export declare class WrappedHandler {
     call<T extends keyof Handler>(target: WrappedObjectData, method: T, params: ParametersSkipFirst<Handler[T]>): ReturnType<Handler[T]>;
     handle<T extends keyof Handler>(request: WrappedRequest): TSONData<any, any>;
     delete(id: string): boolean;
+    get(id: string): object;
 }
