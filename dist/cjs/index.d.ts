@@ -47,6 +47,7 @@ export declare class WrappedHandler {
     load<T extends object>(data: WrappedObjectData): T;
     new(value: object, id?: string): string;
     join(value: object, id?: string): WrappedObjectData;
+    local(id: string): WrappedObjectData;
     remote<T extends object>(data: WrappedObjectData): T;
     call<T extends keyof Handler>(target: WrappedObjectData, method: T, params: ParametersSkipFirst<Handler[T]>): ReturnType<Handler[T]>;
     handle<T extends keyof Handler>(request: WrappedRequest): TSONData<any, any>;

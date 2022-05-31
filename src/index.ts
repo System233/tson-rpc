@@ -135,6 +135,17 @@ export class WrappedHandler {
             type
         }
     }
+    local(id:string):WrappedObjectData{
+        const value=this.get(id);
+        if(value==null){
+            return null;
+        }
+        const type=typeOf(value);
+        return {
+            type,
+            id
+        }
+    }
     remote<T extends object>(data: WrappedObjectData): T {
         const obj = new WrappedObject<T>(this, data) as T;
         this.new(obj, data.id);

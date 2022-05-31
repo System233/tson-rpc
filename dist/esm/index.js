@@ -121,6 +121,17 @@ export class WrappedHandler {
             type
         };
     }
+    local(id) {
+        const value = this.get(id);
+        if (value == null) {
+            return null;
+        }
+        const type = typeOf(value);
+        return {
+            type,
+            id
+        };
+    }
     remote(data) {
         const obj = new WrappedObject(this, data);
         this.new(obj, data.id);
